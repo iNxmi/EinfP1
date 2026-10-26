@@ -90,3 +90,12 @@ jobs:
         run: |
           gh release upload "${{ github.event.release.tag_name }}" \
             "${{ steps.package.outputs.archive_path }}#${{ steps.package.outputs.archive_name }}"
+
+      - name: Delete release on failure
+        if: failure()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          echo "Build failed. Deleting release $TAG..."
+          gh release delete "$TAG" --yes --cleanup-tag
