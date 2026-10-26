@@ -1,20 +1,35 @@
 # EinfP1 Master Repository
 
-## Adding a new exercise
+Central repository for managing university programming exercises, upstream synchronization, and automated submission builds.
+
+---
+
+## Exercise Management
+
+Both scripts accept exercise numbers in single-digit, zero-padded, or prefixed formats (e.g., `1`, `01`, `uebung01`).
+
+### Adding an Exercise
+Imports the upstream exercise repository as a subtree into `exercises/uebung<ID>` and cleans up boilerplate files:
+
+```bash
+./scripts/create.sh <ID>
 ```
-git remote add upstream_uebung01 https://programmierung2026:glpat-BbdmmWHW74cJv0dhV1Ex5m86MQp1OjFuZwk.01.0z0uhfxhl@gitlab.hefdi.de/tuda/einf_prog_i/2026/material/tutorials/uebung01.git
-git subtree add --prefix=exercises/uebung01 upstream_uebung01 master --squash
 
-./scripts/create.sh 1
+### Updating an Exercise
+Pulls the latest changes from the university upstream remote into the local subtree:
+
+```bash
+./scripts/update.sh <ID>
 ```
 
-## Updating a exercise
-```
-git subtree pull --prefix=exercises/uebung01 upstream_uebung01 master --squash
+---
 
-./scripts/update.sh 1
-```
+## Submissions & Releases
 
-## Creating a submission/release
+Submissions are packaged automatically via GitHub Actions:
 
-go on github and +
+1. Draft a new release on GitHub.
+2. Set the tag to the exercise identifier (e.g., `v1`, `01`, or `uebung01`).
+3. Publish the release.
+
+The workflow bundles all solution files (`.c`, `.h`, `.txt`) along with `library/matrikelnummern.txt` and attaches the resulting `<matnr1>_<matnr2>.tar.gz` archive directly to the release assets.
