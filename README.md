@@ -2,6 +2,8 @@
 
 Central repository for managing university programming exercises, upstream synchronization, and automated submission builds.
 
+* **Moodle Course:** [Einführung in die Programmierung I (TU Darmstadt)](https://moodle.tu-darmstadt.de/course/view.php?id=50666)
+
 ---
 
 ## Exercise Management
