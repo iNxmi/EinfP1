@@ -28,10 +28,10 @@ jobs:
           if [ -n "$TARGET_DIR" ] && [ -d "$TARGET_DIR" ]; then
             echo "target_dir=$TARGET_DIR" >> "$GITHUB_OUTPUT"
           else
-            echo "Kein passender Ordner über Tag gefunden ($TAG). Fallback auf ersten Ordner in exercises/."
+            echo "No matching directory found from tag ($TAG). Falling back to the first directory in exercises/."
             FIRST_DIR=$(find exercises -mindepth 1 -maxdepth 1 -type d | sort | head -n1)
             if [ -z "$FIRST_DIR" ]; then
-              echo "Fehler: Kein Übungsordner unter exercises/ gefunden." >&2
+              echo "Error: No exercise directory found under exercises/." >&2
               exit 1
             fi
             echo "target_dir=$FIRST_DIR" >> "$GITHUB_OUTPUT"
@@ -44,17 +44,17 @@ jobs:
           matnr_file="library/matrikelnummern.txt"
 
           if [[ ! -d "$dir" ]]; then
-            echo "Fehler: '$dir' ist kein Verzeichnis" >&2
+            echo "Error: '$dir' is not a directory" >&2
             exit 1
           fi
 
           if [[ ! -f "$matnr_file" ]]; then
-            echo "Fehler: Zentrale Datei '$matnr_file' nicht gefunden" >&2
+            echo "Error: Central file '$matnr_file' not found" >&2
             exit 1
           fi
 
           if [[ ! -f "$dir/erklaerung.txt" ]]; then
-            echo "Fehler: '$dir/erklaerung.txt' nicht gefunden" >&2
+            echo "Error: '$dir/erklaerung.txt' not found" >&2
             exit 1
           fi
 
@@ -66,11 +66,11 @@ jobs:
           done < "$matnr_file"
 
           if [[ -z "$base" ]]; then
-            echo "Fehler: keine Matrikelnummern in $matnr_file gefunden" >&2
+            echo "Error: No matriculation numbers found in $matnr_file" >&2
             exit 1
           fi
 
-          # Zentrale Datei temporär in den Übungsordner kopieren, damit sie im Archiv landet
+          # Temporarily copy central file into the exercise directory for inclusion in the archive
           cp "$matnr_file" "$dir/matrikelnummern.txt"
 
           archive_name="${base}.tar.gz"
