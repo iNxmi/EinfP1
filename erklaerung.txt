@@ -1,0 +1,22 @@
+# Dokumentieren Sie in dieser Datei, welche Hilfsmittel, insbesondere KI, 
+# Sie fuer die Bearbeitung der einzelnen Aufgabern eingesetzt haben
+# Notieren Sie dabei das Hilfsmittel (z.B. chatGPT oder claude), den Verwendungszweck, und den betroffenen Teil der Aufgabe
+# notieren Sie auch, welche Codezeilen Sie von der KI uebernommen haben
+#
+# Wenn Sie keine KI bei der Bearbeitung einer Aufgabe verwendet haben, 
+# dann notieren Sie bitte explizit "Keine KI eingesetzt" fuer diese Aufgabe
+
+# Beispiel
+# Aufgabe 1
+# chatGPT,   Erklaerung der Befehlssyntax, scanf()
+# chatGPT,   Erklaerung einer Fehlermeldung und Korrektur, in der Funktion datei_einlesen() 
+# claude.ai, Verbesserungsvorschlag für eine Funktion, in der Funktion collatz_laenge()
+#
+# Der Code in der Schleife in den Zeilen 14-17 wurde aus dem Vorschlag von chatGPT uebernommen
+#
+#
+# Aufgabe 2
+# fuer die Erstellung der Loesung wurde keine KI verwendet
+#
+
+
