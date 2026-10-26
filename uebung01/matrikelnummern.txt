@@ -1,0 +1,6 @@
+# Pro Gruppenteilnehmer eine Zeile in der Form
+# matrikelnummer, "Name", "Vorname", gitlab_user_id
+# ihre gitlab_user_id koennen Sie nach Anmeldung in gitlab finden, indem Sie rechts oben
+# auf Ihren Avatar (meistens der Anfangsbuchstabe Ihres Names) klicken, den ersten Menuepunkt
+# mit ihrem Namen auswaehlen, und dann auf die drei senkrechten Punkte am rechten Rand klicken
+#
