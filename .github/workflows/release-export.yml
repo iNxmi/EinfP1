@@ -17,7 +17,6 @@ jobs:
       - name: Locate exercise directory
         id: locate
         run: |
-          # Extrahiert Nummern aus dem Tag, z.B. "v1", "uebung-01", "1" -> "01"
           TAG="${{ github.event.release.tag_name }}"
           RAW_NUM=$(echo "$TAG" | grep -o -E '[0-9]+' | head -n1 || true)
 
@@ -42,30 +41,37 @@ jobs:
         id: package
         run: |
           dir="${{ steps.locate.outputs.target_dir }}"
+          matnr_file="library/matrikelnummern.txt"
 
           if [[ ! -d "$dir" ]]; then
             echo "Fehler: '$dir' ist kein Verzeichnis" >&2
             exit 1
           fi
 
-          for f in matrikelnummern.txt erklaerung.txt; do
-            if [[ ! -f "$dir/$f" ]]; then
-              echo "Fehler: '$dir/$f' nicht gefunden" >&2
-              exit 1
-            fi
-          done
+          if [[ ! -f "$matnr_file" ]]; then
+            echo "Fehler: Zentrale Datei '$matnr_file' nicht gefunden" >&2
+            exit 1
+          fi
+
+          if [[ ! -f "$dir/erklaerung.txt" ]]; then
+            echo "Fehler: '$dir/erklaerung.txt' nicht gefunden" >&2
+            exit 1
+          fi
 
           base=""
           while IFS=',' read -r matnr _rest || [[ -n "$matnr" ]]; do
             matnr="${matnr//[[:space:]]/}"
             [[ -z "$matnr" || "$matnr" == \#* ]] && continue
             base="${base:+${base}_}${matnr}"
-          done < "$dir/matrikelnummern.txt"
+          done < "$matnr_file"
 
           if [[ -z "$base" ]]; then
-            echo "Fehler: keine Matrikelnummern in $dir/matrikelnummern.txt gefunden" >&2
+            echo "Fehler: keine Matrikelnummern in $matnr_file gefunden" >&2
             exit 1
           fi
+
+          # Zentrale Datei temporär in den Übungsordner kopieren, damit sie im Archiv landet
+          cp "$matnr_file" "$dir/matrikelnummern.txt"
 
           archive_name="${base}.tar.gz"
           out="$(pwd)/${archive_name}"
