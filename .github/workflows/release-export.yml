@@ -1,0 +1,86 @@
+name: Package Exercise Submission
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Locate exercise directory
+        id: locate
+        run: |
+          # Extrahiert Nummern aus dem Tag, z.B. "v1", "uebung-01", "1" -> "01"
+          TAG="${{ github.event.release.tag_name }}"
+          RAW_NUM=$(echo "$TAG" | grep -o -E '[0-9]+' | head -n1 || true)
+
+          if [ -n "$RAW_NUM" ]; then
+            PADDED_NUM=$(printf "%02d" "$RAW_NUM")
+            TARGET_DIR="exercises/uebung$PADDED_NUM"
+          fi
+
+          if [ -n "$TARGET_DIR" ] && [ -d "$TARGET_DIR" ]; then
+            echo "target_dir=$TARGET_DIR" >> "$GITHUB_OUTPUT"
+          else
+            echo "Kein passender Ordner über Tag gefunden ($TAG). Fallback auf ersten Ordner in exercises/."
+            FIRST_DIR=$(find exercises -mindepth 1 -maxdepth 1 -type d | sort | head -n1)
+            if [ -z "$FIRST_DIR" ]; then
+              echo "Fehler: Kein Übungsordner unter exercises/ gefunden." >&2
+              exit 1
+            fi
+            echo "target_dir=$FIRST_DIR" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Package submission archive
+        id: package
+        run: |
+          dir="${{ steps.locate.outputs.target_dir }}"
+
+          if [[ ! -d "$dir" ]]; then
+            echo "Fehler: '$dir' ist kein Verzeichnis" >&2
+            exit 1
+          fi
+
+          for f in matrikelnummern.txt erklaerung.txt; do
+            if [[ ! -f "$dir/$f" ]]; then
+              echo "Fehler: '$dir/$f' nicht gefunden" >&2
+              exit 1
+            fi
+          done
+
+          base=""
+          while IFS=',' read -r matnr _rest || [[ -n "$matnr" ]]; do
+            matnr="${matnr//[[:space:]]/}"
+            [[ -z "$matnr" || "$matnr" == \#* ]] && continue
+            base="${base:+${base}_}${matnr}"
+          done < "$dir/matrikelnummern.txt"
+
+          if [[ -z "$base" ]]; then
+            echo "Fehler: keine Matrikelnummern in $dir/matrikelnummern.txt gefunden" >&2
+            exit 1
+          fi
+
+          archive_name="${base}.tar.gz"
+          out="$(pwd)/${archive_name}"
+          parent="$(cd "$dir/.." && pwd)"
+          name="$(basename "$(cd "$dir" && pwd)")"
+
+          (cd "$parent" && find "$name" -type f \( -name '*.txt' -o -name '*.c' -o -name '*.h' \) -print0 \
+            | tar -czf "$out" --null -T -)
+
+          echo "archive_path=$out" >> "$GITHUB_OUTPUT"
+          echo "archive_name=$archive_name" >> "$GITHUB_OUTPUT"
+
+      - name: Upload Archive to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${{ github.event.release.tag_name }}" \
+            "${{ steps.package.outputs.archive_path }}#${{ steps.package.outputs.archive_name }}"
