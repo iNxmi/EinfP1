@@ -9,7 +9,13 @@ const int werte[ANZAHL_WERTE] = {50000, 20000, 10000, 5000, 2000, 1000, 500,
 
 // Berechnet das Wechselgeld und gibt die Anzahl der einzelnen Stückelungen zurück.
 int wechselgeld_berechnen(int cents, int anzahlen[ANZAHL_WERTE]) {
-    /* auszufüllen */
+    int gesamtzahl = 0;
+    for (int i = 0; i < ANZAHL_WERTE; i++) {
+        anzahlen[i] = cents / werte[i];
+        cents = cents % werte[i];
+        gesamtzahl += anzahlen[i];
+    }
+    return gesamtzahl;
 }
 
 // Gibt das Wechselgeld und die Anzahl der einzelnen Stückelungen aus.
@@ -35,17 +41,18 @@ int main(void) {
         return 1;       // Rückmeldung eines Fehlers
     }
     printf("Gegebener Betrag (in Cent): ");
-    if ( /* auszufüllen */ ) {
+    if (scanf("%d", &gegeben) != 1 || gegeben < 0) {
         printf("Ungültiger Betrag.\n");
         return 1;
     }
 
     // Nicht genügend Geld gegeben
-    if ( /* auszufüllen */) {
-        /* auszufüllen */
+    if (gegeben < preis) {
+        printf("Nicht genügend Geld gegeben.\n");
+        return 1;
     }
 
-    int total = wechselgeld_berechnen( /* auszufüllen */ );
+    int total = wechselgeld_berechnen(gegeben - preis, anzahlen);
     wechselgeld_ausgeben(gegeben - preis, anzahlen, total);
 
     return 0;
