@@ -6,6 +6,55 @@ int primfaktorzerlegung(int zahl, int faktoren[], int vielfachheiten[]) {
 
     /* auszufüllen */
 
+    int p = 2;
+    int n = zahl;
+    int vorkommen = 0;
+
+    int check = 2;
+
+    /* Checken ob Zahl eine primzahl ist */
+    if (zahl == 1 || zahl == 2) {
+        faktoren[0] = zahl;
+        vielfachheiten[0] = 1;
+        return 1;
+    }
+
+    while ((check*check) <= n) {
+        if (n % check == 0) {
+            break;
+        }
+        if ((check+1)*(check+1) > n ) {
+            faktoren[0] = zahl;
+            vielfachheiten[0] = 1;
+            return 1;
+        }
+    }
+
+    /* Ende vom check */
+
+    while ((p*p) <= n) {
+        if (n % p == 0) {
+            n = n/p;
+            faktoren[anzahl] = p;
+            vorkommen++;
+        }
+        else {
+            if (p == 2)
+                p = 3;
+            else {
+                p = p + 2;
+            }
+            vielfachheiten[anzahl] = vorkommen;
+            anzahl++;
+            vorkommen = 0;
+        }
+    }
+
+    if (n > 1) {
+        faktoren[anzahl] = n;
+        anzahl++;
+    }
+
     return anzahl;
 }
 
