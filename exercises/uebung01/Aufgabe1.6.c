@@ -1,12 +1,17 @@
 #include <stdio.h>
 
 int einfaches_querprodukt(int startzahl) {
-    int result = 0;
+    if (startzahl < 10)
+        return startzahl;
 
     int temporary = startzahl;
+
+    int result = temporary % 10;
+    temporary /= 10;
+
     while (temporary > 0) {
         const int digit = temporary % 10;
-        result += digit;
+        result *= digit;
 
         temporary /= 10;
     }
