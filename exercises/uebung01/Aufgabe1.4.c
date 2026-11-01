@@ -10,28 +10,72 @@ int primfaktorzerlegung(int zahl, int faktoren[], int vielfachheiten[]) {
     int n = zahl;
     int vorkommen = 0;
 
-    int check = 2;
-
     /* Checken ob Zahl eine primzahl ist */
-    if (zahl == 1 || zahl == 2) {
+    if (zahl == 2) {
         faktoren[0] = zahl;
         vielfachheiten[0] = 1;
         return 1;
     }
 
-     do {
-        if (n % check == 0) {
+    for (int i=2; i*i < zahl; i++ ) {
+        if (zahl % i == 0) {
             break;
         }
-        if ((check+1)*(check+1) > n ) {
+        if ((i+1)*(i+1) >= zahl ) {
             faktoren[0] = zahl;
             vielfachheiten[0] = 1;
             return 1;
         }
-        check++;
-    } while ((check*check) <= n);
+    }
     /* Ende vom check */
 
+    /*Test case für 2 damit der rest simpler ist*/
+
+    while (p*p <= n) {
+        if (n % p == 0) {
+            faktoren[anzahl] = n;
+            n = n/p;
+            vorkommen++;
+        }
+        else {
+            if (faktoren[anzahl] == 2) {
+                vielfachheiten[anzahl] = vorkommen;
+                anzahl++;
+            }
+            vorkommen = 0;
+            p=3;
+            break;
+        }
+    }
+
+    /* Hauptcode */
+    
+    while ((p)*(p) <= n) {
+        if (n % p == 0) {
+            faktoren[anzahl] = n;
+            n = n/p;
+            vorkommen++;
+        }
+        else {
+            if (faktoren[anzahl] == p) {
+                vielfachheiten[anzahl] = vorkommen;
+                anzahl++;
+            }
+            p = p+2;
+            vorkommen = 0;
+        }
+    }
+
+    /* Ab hier der check für rest*/
+
+    if (n > 1) {
+        faktoren[anzahl] = n;
+        vielfachheiten[anzahl] = 1;
+        anzahl++;
+    }
+
+
+    /* Alter code, geht nicht
     do {
         if (n % p == 0) {
             n = n/p;
@@ -61,7 +105,7 @@ int primfaktorzerlegung(int zahl, int faktoren[], int vielfachheiten[]) {
         vielfachheiten[anzahl] = 1;
         anzahl++;
     }
-
+    */
     return anzahl;
 }
 

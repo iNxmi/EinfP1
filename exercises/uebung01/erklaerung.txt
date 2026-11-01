@@ -2,3 +2,7 @@
 
 - Gemini gefragt was in diesem kontext eine 'triviale primzahl' sein soll (weil wir keine definition dafür gefunden haben)
 - test cases generiert um zu überprüfen ob die berechnung richtig ist.
+
+# Aufgabe1.5
+
+-KI nach dezimal zu binär rechnungsmethoden gefragt (Google AI overview)
