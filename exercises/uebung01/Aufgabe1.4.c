@@ -28,11 +28,11 @@ int primfaktorzerlegung(int zahl, int faktoren[], int vielfachheiten[]) {
             vielfachheiten[0] = 1;
             return 1;
         }
+        check++;
     }
-
     /* Ende vom check */
 
-    while ((p*p) <= n) {
+    do {
         if (n % p == 0) {
             n = n/p;
             faktoren[anzahl] = p;
@@ -48,10 +48,11 @@ int primfaktorzerlegung(int zahl, int faktoren[], int vielfachheiten[]) {
             anzahl++;
             vorkommen = 0;
         }
-    }
+    } while ((p*p) <= n);
 
     if (n > 1) {
         faktoren[anzahl] = n;
+        vielfachheiten[anzahl] = 1;
         anzahl++;
     }
 

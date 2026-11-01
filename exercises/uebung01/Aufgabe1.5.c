@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void binärdarstellung(int zahl) {
-    /* auszufüllen */
+    
 }
 
 int main() {
