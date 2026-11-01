@@ -1,0 +1,4 @@
+# Aufgabe1.4
+
+Gemini gefragt was in diesem kontext eine triviale primzahl sein soll (weil wir keine definition dafür gefunden haben)
+
