@@ -10,8 +10,9 @@ int ist_balanciert(char s[]) {
         if (character == '(') {
             counter++;
         } else if (character == ')') {
-            if (counter <= 0)
+            if (counter <= 0){
                 return 0;
+            }
 
             counter--;
         }
