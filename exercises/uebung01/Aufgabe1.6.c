@@ -1,8 +1,9 @@
 #include <stdio.h>
 
 int einfaches_querprodukt(int startzahl) {
-    if (startzahl < 10)
+    if (startzahl < 10){
         return startzahl;
+    }
 
     int temporary = startzahl;
 
