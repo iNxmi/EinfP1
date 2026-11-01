@@ -1,4 +1,4 @@
 # Aufgabe1.4
 
-Gemini gefragt was in diesem kontext eine triviale primzahl sein soll (weil wir keine definition dafür gefunden haben)
-
+- Gemini gefragt was in diesem kontext eine 'triviale primzahl' sein soll (weil wir keine definition dafür gefunden haben)
+- test cases generiert um zu überprüfen ob die berechnung richtig ist.
