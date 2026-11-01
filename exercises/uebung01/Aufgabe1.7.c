@@ -11,7 +11,7 @@ int ist_balanciert(char s[]) {
             counter++;
         } else if (character == ')') {
             if (counter <= 0)
-                return false;
+                return 0;
 
             counter--;
         }
