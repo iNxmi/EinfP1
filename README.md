@@ -3,8 +3,7 @@
 Central repository for managing university programming exercises, upstream synchronization, and automated submission
 builds.
 
-* **Moodle
-  Course:** [Einführung in die Programmierung I (TU Darmstadt)](https://moodle.tu-darmstadt.de/course/view.php?id=50666)
+* **Moodle Course:** [Einführung in die Programmierung I (TU Darmstadt)](https://moodle.tu-darmstadt.de/course/view.php?id=50666)
 
 ---
 
@@ -18,28 +17,6 @@ To pass, the following requirements must be met:
 - 2 – 3 testates (Testate)
 - Registration in TuCAN by mid-November
 - Every submission must contain the files "matrikelnummern.txt" (with all group members and GitLab IDs) and "erklaerung.txt" (documenting all resources and AI used) in the root directory, otherwise 0 points will be awarded.
-
-## Exercise Management
-
-Both scripts accept exercise numbers in single-digit, zero-padded, or prefixed formats (e.g., `1`, `01`, `uebung01`).
-
-### Adding an Exercise
-
-Imports the upstream exercise repository as a subtree into `exercises/uebung<ID>` and cleans up boilerplate files:
-
-```bash
-./scripts/create.sh <ID>
-```
-
-### Updating an Exercise
-
-Pulls the latest changes from the university upstream remote into the local subtree:
-
-```bash
-./scripts/update.sh <ID>
-```
-
----
 
 ## Submissions & Releases
 

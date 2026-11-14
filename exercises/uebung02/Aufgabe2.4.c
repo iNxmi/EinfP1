@@ -6,43 +6,37 @@ int main(int argc, char *argv[]) {
 		printf("This Program must be called with exactly two arguments specifying the name of the input and output file. Terminating.\n");
 		return 1;
 	}
-	//  Deklariere Pointer für Input- und Outputdatei.
-	FILE *ifptr, *ofptr;
 
-	/* 	Öffne Inputdatei (übergeben in der Kommandozeile im selben Verzeichnis wie
-	*	  das ausführende Programm). "r" steht hier für "read". */
-	ifptr = fopen(argv[1], "r");
-	//  Informiere den Nutzer, falls das Öffnen der Datei fehlgeschlagen ist
-	if (ifptr == NULL) {
+	FILE *inputFilePointer = fopen(argv[1], "r");
+	if (inputFilePointer == NULL) {
 		fprintf(stderr, "Can't open input file!\n");
 		return 1;
 	}
 
-	//  Summiere über alle Zahlen in der Datei zu findenden Zahlen
-	int num = 0;
-	int sum = 0;
-	/*	Lese aus jeder Zeile der geöffneten Datei einen Integer und speichere ihn
-	*	  in der Variable num. fscanf(..) gibt einen Wert größer 0 zurück, solange
-	*	  das Dateiende nicht	erreicht ist. */
-	while(fscanf(ifptr, "%d", &num) > 0) {
-		sum += num;
-	}
-
-	/* 	Öffne Outputdatei übergeben in Kommandozeile im selben Verzeichnis wie das ausführende Programm. "w" steht hier für "write". */
-	ofptr = fopen(argv[2], "w");
-
-	//  Informiere den Nutzer, falls Öffnen der Datei fehlgeschlagen ist
-	if (ofptr == NULL) {
+	FILE *outputFilePointer = fopen(argv[2], "w");
+	if (outputFilePointer == NULL) {
 		fprintf(stderr, "Can't open output file!\n");
 		return 1;
 	}
 
-	//  Schreibe Summe in die Outputdatei
-	fprintf(ofptr, "%i", sum);
+	int divisor = 0;
+	int number = 0;
+	int isFirstIteration = true;
+	while(fscanf(inputFilePointer, "%d", &number) > 0) {
+		if (isFirstIteration) {
+			divisor = number;
+			isFirstIteration = false;
+			continue;
+		}
 
-	//  Schließe die beiden Dateien
-	fclose(ifptr);
-	fclose(ofptr);
+		if (number % divisor != 0)
+			continue;
+
+		fprintf(outputFilePointer, "%i\n", number);
+	}
+
+	fclose(inputFilePointer);
+	fclose(outputFilePointer);
 
 	return 0;
 }
