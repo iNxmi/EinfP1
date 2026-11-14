@@ -91,6 +91,35 @@ jobs:
           gh release upload "${{ github.event.release.tag_name }}" \
             "${{ steps.package.outputs.archive_path }}#${{ steps.package.outputs.archive_name }}"
 
+      - name: Push contents to GitLab via SSH
+        if: success()
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.GITLAB_SSH_KEY }}
+          GITLAB_HOST: "gitlab.hefdi.de"
+          GITLAB_REPO: "git@gitlab.hefdi.de:tuda/einf_prog_i/2026/tutorials/${{ github.event.release.tag_name }}/Gruppe_76.git"
+          BRANCH: "main"
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$GITLAB_HOST" >> ~/.ssh/known_hosts
+          
+          workdir=$(mktemp -d)
+          git clone "$GITLAB_REPO" "$workdir"
+          
+          # Add --strip-components=1 if files should be placed in the repo root instead of uebungXX/
+          tar -xzf "${{ steps.package.outputs.archive_path }}" --strip-components=1 -C "$workdir"
+          
+          cd "$workdir"
+          git config user.name "Memphis Herghelegiu"
+          git config user.email "memphis.herghelegiu@stud.tu-darmstadt.de"
+          
+          git add .
+          if ! git diff --cached --quiet; then
+            git commit -m "${{ github.event.release.tag_name }}"
+            git push origin "$BRANCH"
+          fi
+
       - name: Delete release on failure
         if: failure()
         env:
