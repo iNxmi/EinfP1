@@ -2,15 +2,15 @@
 
 int euclid(int a, int b)
 {
-    /* Auszufüllen */
-    int swap = -1;
-    while (true) {
+    int swap = 0;
+    while (1) {
         if (b <= a) {
             swap = a;
             a = b;
             b = swap;
         }
-        if (a % b == 0) {
+        //iwi macht das mit a % b nicht viel sinn wenn b immer größer sein soll als a
+        if (b % a == 0) {
             return a;
         }
         b = b % a;
