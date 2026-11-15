@@ -18,23 +18,21 @@ jobs:
         id: locate
         run: |
           TAG="${{ github.event.release.tag_name }}"
-          RAW_NUM=$(echo "$TAG" | grep -o -E '[0-9]+' | head -n1 || true)
 
-          if [ -n "$RAW_NUM" ]; then
-            PADDED_NUM=$(printf "%02d" "$RAW_NUM")
+          if [[ "$TAG" =~ ^v([0-9]+)\.[0-9]+$ ]]; then
+            RAW_NUM="${BASH_REMATCH[1]}"
+            PADDED_NUM=$(printf "%02d" "$((10#$RAW_NUM))")
             TARGET_DIR="exercises/uebung$PADDED_NUM"
+          else
+            echo "Error: Tag '$TAG' does not match format 'vX.X'." >&2
+            exit 1
           fi
 
-          if [ -n "$TARGET_DIR" ] && [ -d "$TARGET_DIR" ]; then
+          if [ -d "$TARGET_DIR" ]; then
             echo "target_dir=$TARGET_DIR" >> "$GITHUB_OUTPUT"
           else
-            echo "No matching directory found from tag ($TAG). Falling back to the first directory in exercises/."
-            FIRST_DIR=$(find exercises -mindepth 1 -maxdepth 1 -type d | sort | head -n1)
-            if [ -z "$FIRST_DIR" ]; then
-              echo "Error: No exercise directory found under exercises/." >&2
-              exit 1
-            fi
-            echo "target_dir=$FIRST_DIR" >> "$GITHUB_OUTPUT"
+            echo "Error: Target directory '$TARGET_DIR' does not exist." >&2
+            exit 1
           fi
 
       - name: Package submission archive
