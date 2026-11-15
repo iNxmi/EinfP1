@@ -3,6 +3,18 @@
 int euclid(int a, int b)
 {
     /* Auszufüllen */
+    int swap = -1;
+    while (true) {
+        if (b <= a) {
+            swap = a;
+            a = b;
+            b = swap;
+        }
+        if (a % b == 0) {
+            return a;
+        }
+        b = b % a;
+    }
 }
 
 int main (void) 
