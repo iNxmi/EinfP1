@@ -26,15 +26,15 @@ char genre[NUMBER_OF_MOVIES][GENRE_LENGTH] = {0};
 int position[NUMBER_OF_MOVIES] = {0};
 
 void read_movies(void) {
-    FILE *input_file_pointer = fopen("movies.in", "r");
-    if (input_file_pointer == NULL) {
+    FILE *file_pointer = fopen("movies.in", "r");
+    if (file_pointer == NULL) {
         fprintf(stderr, "Can't open input file!\n");
         exit(1);
     }
 
     for (size_t index_movie = 0; index_movie < NUMBER_OF_MOVIES; index_movie++) {
         char line[LINE_LENGTH] = {0};
-        if (fgets(line, LINE_LENGTH, input_file_pointer) == NULL)
+        if (fgets(line, LINE_LENGTH, file_pointer) == NULL)
             break;
 
         int category = TITLE;
@@ -64,6 +64,8 @@ void read_movies(void) {
                 const int digit = character - '0';
                 year[index_movie] = year[index_movie] * 10 + digit;
             } else if (category == RATING) {
+                //https://stackoverflow.com/questions/22030021/how-to-convert-a-string-to-a-float-character-by-character-using-java
+
                 if (character == '.') {
                     is_after_decimal_rating = 1;
                     continue;
@@ -92,18 +94,30 @@ void read_movies(void) {
         position[index_movie] = (int) index_movie;
     }
 
-    fclose(input_file_pointer);
+    fclose(file_pointer);
 }
 
-//Funktion schreibt die Datei 'movies_ordered.out' und nutzt dabei die Reihenfolge von 'position'
 void write_movies(void) {
-    FILE *output_file_pointer = fopen("movies_ordered.out", "w");
-    if (output_file_pointer == NULL) {
+    FILE *file_pointer = fopen("movies.out", "w");
+    if (file_pointer == NULL) {
         fprintf(stderr, "Can't open output file!\n");
         exit(1);
     }
 
-    // TODO
+    for (size_t index_position = 0; index_position < NUMBER_OF_MOVIES; index_position++) {
+        const size_t index_movie = position[index_position];
+
+        fprintf(file_pointer, "%s %d %g %d %s %s\n",
+            title[index_movie],
+            year[index_movie],
+            rating[index_movie],
+            length[index_movie],
+            age[index_movie],
+            genre[index_movie]
+        );
+    }
+
+    fclose(file_pointer);
 }
 
 // Vergleich nach Bewertung
@@ -117,11 +131,16 @@ int compare_length(int i, int j) {
 }
 
 // Sortierung mit einem Vergleich, sie können hier ihre Lösung aus Aufgabe 3.1 nutzen
-void sort_movies(int (*compare)(int,int)) {
+void sort_movies(int (*compare)(int, int)) {
     // TODO
 }
 
 // Sortierung mit zweiter Vergleichsfunktionen als Tie-Breaker
 void sort_movies_tie(int (*compare1)(int, int), int (*compare2)(int, int)) {
     // TODO
+}
+
+int main() {
+    read_movies();
+    write_movies();
 }
