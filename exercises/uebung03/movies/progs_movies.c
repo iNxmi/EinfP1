@@ -108,13 +108,17 @@ void write_movies(void) {
         const size_t index_movie = position[index_position];
 
         fprintf(file_pointer, "%s %d %g %d %s %s\n",
-            title[index_movie],
-            year[index_movie],
-            rating[index_movie],
-            length[index_movie],
-            age[index_movie],
-            genre[index_movie]
+                title[index_movie],
+                year[index_movie],
+                rating[index_movie],
+                length[index_movie],
+                age[index_movie],
+                genre[index_movie]
         );
+
+        // fprintf(stdout, "%g\n",
+        //         rating[index_movie]
+        // );
     }
 
     fclose(file_pointer);
@@ -148,7 +152,24 @@ int compare_length(int index_movie_a, int index_movie_b) {
 
 // Sortierung mit einem Vergleich, sie können hier ihre Lösung aus Aufgabe 3.1 nutzen
 void sort_movies(int (*compare)(int, int)) {
-    // TODO
+    for (size_t iteration = 0; iteration < NUMBER_OF_MOVIES - 1; iteration++) {
+        size_t minimum = iteration;
+        for (size_t index_movie = iteration + 1; index_movie < NUMBER_OF_MOVIES; index_movie++) {
+            const int comparison = compare(
+                position[index_movie],
+                position[minimum]
+            );
+
+            if (comparison < 0)
+                minimum = index_movie;
+        }
+
+        if (minimum != iteration) {
+            const int temporary = position[minimum];
+            position[minimum] = position[iteration];
+            position[iteration] = temporary;
+        }
+    }
 }
 
 // Sortierung mit zweiter Vergleichsfunktionen als Tie-Breaker
@@ -158,5 +179,6 @@ void sort_movies_tie(int (*compare1)(int, int), int (*compare2)(int, int)) {
 
 int main() {
     read_movies();
+    sort_movies(compare_rating);
     write_movies();
 }
