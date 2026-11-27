@@ -120,14 +120,30 @@ void write_movies(void) {
     fclose(file_pointer);
 }
 
-// Vergleich nach Bewertung
-int compare_rating(int i, int j) {
-    // TODO
+int compare_rating(int index_movie_a, int index_movie_b) {
+    const double rating_a = rating[index_movie_a];
+    const double rating_b = rating[index_movie_b];
+
+    if (rating_a > rating_b)
+        return -1;
+
+    if (rating_a < rating_b)
+        return 1;
+
+    return 0;
 }
 
-// Vergleich nach Länge
-int compare_length(int i, int j) {
-    // TODO
+int compare_length(int index_movie_a, int index_movie_b) {
+    const double length_a = length[index_movie_a];
+    const double length_b = length[index_movie_b];
+
+    if (length_a < length_b)
+        return -1;
+
+    if (length_a > length_b)
+        return 1;
+
+    return 0;
 }
 
 // Sortierung mit einem Vergleich, sie können hier ihre Lösung aus Aufgabe 3.1 nutzen
