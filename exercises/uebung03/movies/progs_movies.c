@@ -25,7 +25,26 @@ char age[NUMBER_OF_MOVIES][AGE_LENGTH] = {0};
 char genre[NUMBER_OF_MOVIES][GENRE_LENGTH] = {0};
 int position[NUMBER_OF_MOVIES] = {0};
 
+void clear_arrays() {
+    for (size_t index_movie = 0; index_movie < NUMBER_OF_MOVIES; index_movie++) {
+        year[index_movie] = 0;
+        rating[index_movie] = 0.0;
+        length[index_movie] = 0;
+
+        for (size_t index = 0; index < TITLE_LENGTH; index++)
+            title[index_movie][index] = 0;
+
+        for (size_t index = 0; index < AGE_LENGTH; index++)
+            age[index_movie][index] = 0;
+
+        for (size_t index = 0; index < GENRE_LENGTH; index++)
+            genre[index_movie][index] = 0;
+    }
+}
+
 void read_movies(void) {
+    clear_arrays();
+
     FILE *file_pointer = fopen("movies.in", "r");
     if (file_pointer == NULL) {
         fprintf(stderr, "Can't open input file!\n");
@@ -98,7 +117,7 @@ void read_movies(void) {
 }
 
 void write_movies(void) {
-    FILE *file_pointer = fopen("movies.out", "w");
+    FILE *file_pointer = fopen("movies_ordered.out", "w");
     if (file_pointer == NULL) {
         fprintf(stderr, "Can't open output file!\n");
         exit(1);
@@ -106,7 +125,7 @@ void write_movies(void) {
 
     for (size_t index_position = 0; index_position < NUMBER_OF_MOVIES; index_position++) {
         const size_t index_movie = position[index_position];
-        fprintf(file_pointer, "%s %d %g %d %s %s\n",
+        fprintf(file_pointer, "%s %d %.1f %d %s %s\n",
                 title[index_movie],
                 year[index_movie],
                 rating[index_movie],
